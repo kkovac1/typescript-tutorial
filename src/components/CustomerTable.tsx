@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
@@ -32,7 +33,7 @@ const CustomerTable: React.FC<Properties> = ({ customers, setCustomers }) => {
                         <td>{customer.lastName}</td>
                         <td>{customer.email}</td>
                         <td>{customer.city}</td>
-                        <td>{customer.birthDate}</td>
+                        <td>{moment(customer.birthDate).format("DD.MM.YYYY.")}</td>
                         <td>
                             <Link to={`/customer/${customer.id}`}>
                                 <Button variant="outline-primary">Details</Button>

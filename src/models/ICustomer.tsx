@@ -5,4 +5,5 @@ export interface ICustomer {
     email: string;
     city: string;
     birthDate: string;
+    insurancePrice: number;
 }

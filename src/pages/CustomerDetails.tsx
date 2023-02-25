@@ -1,10 +1,39 @@
+import { useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-
+import { ICustomer } from "../models/ICustomer";
+import moment from 'moment'
 
 const CustomerDetails: React.FC = () => {
     let { id } = useParams();
-    const customer = { id: 1, firstName: "Marko", lastName: "Perkovic", email: "thompson@mail.com", city: "Čavoglave", birthDate: "10.10.1980." };
+
+    const [customer, setCustomer] = useState<ICustomer | null>(null);
+
+    useEffect(() => {
+        const res = fetch(`https://localhost:44324/api/Customers/get/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+
+        res
+        .then(res => res.json())
+        .then((data: ICustomer) => {
+            console.log(data);
+            setCustomer(data);
+        });
+    }, [id]);
+
+    const [show, setShow] = useState(false);
+
+    // const handleClose = () => {
+    //     setShow(false);
+    // };
+
+    // const handleShow = () => {
+    //     setShow(true);
+    // };
 
     return (
         <Card>
@@ -19,7 +48,7 @@ const CustomerDetails: React.FC = () => {
             </Card.Header>
 
             <Card.Body>
-                <Card.Text as="div">
+                {customer != null ? <Card.Text as="div">
                     <div>
                         <strong>Firstname:</strong> {customer.firstName}
                     </div>
@@ -33,13 +62,14 @@ const CustomerDetails: React.FC = () => {
                         <strong>City:</strong> {customer.city}
                     </div>
                     <div>
-                        <strong>Birth date:</strong> {customer.birthDate}
+                        <strong>Birth date:</strong> { moment(customer.birthDate).format("DD.MM.YYYY.") }
                     </div>
                     <div>
-                        <strong>Insurance price:</strong> 1
+                        <strong>Insurance price:</strong> {customer.insurancePrice}
                     </div>
-                </Card.Text>
-                <Button variant="primary">Calculate insurance price</Button>
+                </Card.Text> 
+                : null }
+                
 
             </Card.Body>
         </Card>
